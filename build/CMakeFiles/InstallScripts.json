@@ -1,8 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/cmake_install.cmake",
-		"C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

@@ -1,3 +1,0 @@
-C:\Users\joshd\anaconda3\Lib\site-packages\cmake\data\bin\cmake.exe -E rm -f CMakeFiles\SDL3-shared.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SDL3-shared.dir/objects.a @CMakeFiles\SDL3-shared.dir\objects1.rsp
-C:\msys64\ucrt64\bin\gcc.exe -g -shared "-Wl,--version-script=C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-src/src/dynapi/SDL_dynapi.sym" -Wl,--no-undefined -static-libgcc -o SDL3.dll -Wl,--out-implib,libSDL3.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\SDL3-shared.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\SDL3-shared.dir\linkLibs.rsp

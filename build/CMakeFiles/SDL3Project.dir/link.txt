@@ -1,3 +1,0 @@
-C:\Users\joshd\anaconda3\Lib\site-packages\cmake\data\bin\cmake.exe -E rm -f CMakeFiles\SDL3Project.dir/objects.a
-C:\msys64\ucrt64\bin\ar.exe qc CMakeFiles\SDL3Project.dir/objects.a @CMakeFiles\SDL3Project.dir\objects1.rsp
-C:\msys64\ucrt64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\SDL3Project.dir/objects.a -Wl,--no-whole-archive -o SDL3Project.exe -Wl,--out-implib,libSDL3Project.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SDL3Project.dir\linkLibs.rsp
