@@ -1,0 +1,7 @@
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/CMakeFiles/MyProject.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/CMakeFiles/edit_cache.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/CMakeFiles/rebuild_cache.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/CMakeFiles/SDL3-shared.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/CMakeFiles/SDL_uclibc.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/CMakeFiles/edit_cache.dir
+C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/CMakeFiles/rebuild_cache.dir
