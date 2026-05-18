@@ -1,9 +1,11 @@
+#pragma once
+
 #include <SDL3/SDL.h>
 
 /* Constants */
 //Screen dimension constants
-constexpr int kScreenWidth{ 640 };
-constexpr int kScreenHeight{ 480 };
+constexpr int kScreenWidth{ 1000 };
+constexpr int kScreenHeight{ 1000 };
 
 /* Function Prototypes */
 //Starts up SDL and creates window
@@ -17,11 +19,10 @@ void close();
 
 /* Global Variables */
 //The window we'll be rendering to
-SDL_Window* gWindow{ nullptr };
+extern SDL_Window* gWindow;
     
 //The surface contained by the window
-SDL_Surface* gScreenSurface{ nullptr };
+extern SDL_Surface* gScreenSurface;
 
 //The image we will load and show on the screen
-SDL_Surface* gHelloWorld{ nullptr };
-
+extern SDL_Surface* gHelloWorld;

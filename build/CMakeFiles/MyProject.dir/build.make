@@ -86,21 +86,38 @@ CMakeFiles/MyProject.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MyProject.dir/src/main.cpp.s"
 	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\joshd\OneDrive - Monash University\Projects\C++\src\main.cpp" -o CMakeFiles\MyProject.dir\src\main.cpp.s
 
+CMakeFiles/MyProject.dir/src/physics.cpp.obj: CMakeFiles/MyProject.dir/flags.make
+CMakeFiles/MyProject.dir/src/physics.cpp.obj: CMakeFiles/MyProject.dir/includes_CXX.rsp
+CMakeFiles/MyProject.dir/src/physics.cpp.obj: C:/Users/joshd/OneDrive\ -\ Monash\ University/Projects/C++/src/physics.cpp
+CMakeFiles/MyProject.dir/src/physics.cpp.obj: CMakeFiles/MyProject.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="C:\Users\joshd\OneDrive - Monash University\Projects\C++\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MyProject.dir/src/physics.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MyProject.dir/src/physics.cpp.obj -MF CMakeFiles\MyProject.dir\src\physics.cpp.obj.d -o CMakeFiles\MyProject.dir\src\physics.cpp.obj -c "C:\Users\joshd\OneDrive - Monash University\Projects\C++\src\physics.cpp"
+
+CMakeFiles/MyProject.dir/src/physics.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MyProject.dir/src/physics.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\joshd\OneDrive - Monash University\Projects\C++\src\physics.cpp" > CMakeFiles\MyProject.dir\src\physics.cpp.i
+
+CMakeFiles/MyProject.dir/src/physics.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MyProject.dir/src/physics.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\joshd\OneDrive - Monash University\Projects\C++\src\physics.cpp" -o CMakeFiles\MyProject.dir\src\physics.cpp.s
+
 # Object files for target MyProject
 MyProject_OBJECTS = \
-"CMakeFiles/MyProject.dir/src/main.cpp.obj"
+"CMakeFiles/MyProject.dir/src/main.cpp.obj" \
+"CMakeFiles/MyProject.dir/src/physics.cpp.obj"
 
 # External object files for target MyProject
 MyProject_EXTERNAL_OBJECTS =
 
 MyProject.exe: CMakeFiles/MyProject.dir/src/main.cpp.obj
+MyProject.exe: CMakeFiles/MyProject.dir/src/physics.cpp.obj
 MyProject.exe: CMakeFiles/MyProject.dir/build.make
 MyProject.exe: _deps/sdl3-build/libSDL3.dll.a
 MyProject.exe: _deps/sdl3-src/src/dynapi/SDL_dynapi.sym
 MyProject.exe: CMakeFiles/MyProject.dir/linkLibs.rsp
 MyProject.exe: CMakeFiles/MyProject.dir/objects1.rsp
 MyProject.exe: CMakeFiles/MyProject.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="C:\Users\joshd\OneDrive - Monash University\Projects\C++\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable MyProject.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="C:\Users\joshd\OneDrive - Monash University\Projects\C++\build\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable MyProject.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\MyProject.dir\link.txt --verbose=$(VERBOSE)
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold "Copying SDL3.dll to output directory"
 	C:\Users\joshd\anaconda3\Lib\site-packages\cmake\data\bin\cmake.exe -E copy_if_different "C:/Users/joshd/OneDrive - Monash University/Projects/C++/build/_deps/sdl3-build/SDL3.dll" "C:/Users/joshd/OneDrive - Monash University/Projects/C++/build"

@@ -26,6 +26,7 @@ FetchContent_MakeAvailable(SDL3)
 # Executable
 add_executable(${PROJECT_NAME}
     src/main.cpp
+    src/physics.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
