@@ -19,6 +19,12 @@ int metersToPixelInt( float meters )
 
 void updateBall( Ball& ball, double dt )
 {
+    // Initialize inertia if needed (solid disk: I = 0.5 * m * r^2)
+    if( ball.inertia <= 0.0f ) {
+        ball.inertia = 0.5f * ball.mass * ball.radius * ball.radius;
+    }
+
+    // Linear motion
     ball.force = { 0.0f, ball.mass * kGravityMetersPerSecondSquared };
 
     Vec2 acceleration = (1.0f / ball.mass) * ball.force;
@@ -26,7 +32,17 @@ void updateBall( Ball& ball, double dt )
 
     ball.p = ball.p + ball.v * static_cast<float>( dt );
 
+
+    //angular motion
     float angular_acceleration = ball.torque/ball.inertia;
+
+    ball.av += angular_acceleration * static_cast<float>( dt );
+    ball.angle += ball.av * static_cast<float>( dt );
+    ball.torque = 0.0f;
+
+    const float PI = 3.14159265358979323846f;
+    while( ball.angle > PI ) ball.angle -= 2.0f * PI;
+    while( ball.angle < -PI ) ball.angle += 2.0f * PI;
 
     if( ball.p.y + ball.radius >= kWorldHeightMeters )
     {

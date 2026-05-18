@@ -6,6 +6,7 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 SDL_Window* gWindow{ nullptr };
 SDL_Surface* gScreenSurface{ nullptr };
@@ -60,17 +61,67 @@ void close()
 }
 
 void renderBall (const Ball& ball) {
-    SDL_Rect rect
-    {
-        metersToPixelInt( ball.p.x - ball.radius ),
-        metersToPixelInt( ball.p.y - ball.radius ),
-        metersToPixelInt( ball.radius * 2.0f ),
-        metersToPixelInt( ball.radius * 2.0f )
+    int cx = metersToPixelInt(ball.p.x);
+    int cy = metersToPixelInt(ball.p.y);
+
+    // Corners of the ball square centered at origin
+    float halfSize = ball.radius;
+    Vec2 corners[4] = {
+        { -halfSize, -halfSize },
+        { halfSize, -halfSize },
+        { halfSize, halfSize },
+        { -halfSize, halfSize }
     };
 
+    // Rotate corners by ball.angle
+    float c = std::cos( ball.angle );
+    float s = std::sin( ball.angle );
+
+    int px[4], py[4];
+    for( int i = 0; i < 4; i++ ) {
+        float rx = corners[i].x * c - corners[i].y * s;
+        float ry = corners[i].x * s + corners[i].y * c;
+        px[i] = cx + metersToPixelInt( rx );
+        py[i] = cy + metersToPixelInt( ry );
+    }
+    
+    // Draw rotated square filled with black
     Uint32 black = SDL_MapSurfaceRGB( gScreenSurface, 0, 0, 0 );
 
-    SDL_FillSurfaceRect( gScreenSurface, &rect, black );
+    int minY = std::min( {py[0], py[1], py[2], py[3]} );
+    int maxY = std::max( {py[0], py[1], py[2], py[3]} );
+
+    for( int y = minY; y <= maxY; y++ ) {
+        std::vector<float> intersections;
+        intersections.reserve( 4 );
+
+        for( int i = 0; i < 4; i++ ) {
+            int j = ( i + 1 ) % 4;
+            int y0 = py[i];
+            int y1 = py[j];
+
+            // Use a half-open interval to avoid double-counting shared vertices.
+            if( ( y0 <= y && y1 > y ) || ( y1 <= y && y0 > y ) ) {
+                float t = static_cast<float>( y - y0 ) / static_cast<float>( y1 - y0 );
+                float x = static_cast<float>( px[i] ) + t * static_cast<float>( px[j] - px[i] );
+                intersections.push_back( x );
+            }
+        }
+
+        if( intersections.size() < 2 ) {
+            continue;
+        }
+
+        std::sort( intersections.begin(), intersections.end() );
+        for( size_t k = 0; k + 1 < intersections.size(); k += 2 ) {
+            int xStart = static_cast<int>( std::ceil( intersections[k] ) );
+            int xEnd = static_cast<int>( std::floor( intersections[k + 1] ) );
+            if( xEnd >= xStart ) {
+                SDL_Rect line{ xStart, y, xEnd - xStart + 1, 1 };
+                SDL_FillSurfaceRect( gScreenSurface, &line, black );
+            }
+        }
+    }
 }
 
 void clearScreen()
@@ -117,7 +168,7 @@ int main( int argc, char* args[] )
         ball.v.y = 0.0f;
         ball.radius = 0.4f;
 
-        ball.torque = 1.0f;
+        ball.av = 5.0f;  // Initial angular velocity for visible rotation
         ball.inertia = 1.0f;
 
         Uint64 lastCounter = SDL_GetPerformanceCounter();
