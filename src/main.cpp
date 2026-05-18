@@ -62,8 +62,8 @@ void close()
 void renderBall (const Ball& ball) {
     SDL_Rect rect
     {
-        metersToPixelInt( ball.x - ball.radius ),
-        metersToPixelInt( ball.y - ball.radius ),
+        metersToPixelInt( ball.p.x - ball.radius ),
+        metersToPixelInt( ball.p.y - ball.radius ),
         metersToPixelInt( ball.radius * 2.0f ),
         metersToPixelInt( ball.radius * 2.0f )
     };
@@ -110,11 +110,11 @@ int main( int argc, char* args[] )
     {
         Ball ball;
 
-        ball.x = 1.0f;
-        ball.y = 1.0f;
+        ball.p.x = 1.0f;
+        ball.p.y = 1.0f;
 
-        ball.vx = 1.0f;
-        ball.vy = 0.0f;
+        ball.v.x = 1.0f;
+        ball.v.y = 0.0f;
         ball.radius = 0.4f;
 
         Uint64 lastCounter = SDL_GetPerformanceCounter();
