@@ -117,6 +117,9 @@ int main( int argc, char* args[] )
         ball.v.y = 0.0f;
         ball.radius = 0.4f;
 
+        ball.torque = 1.0f;
+        ball.inertia = 1.0f;
+
         Uint64 lastCounter = SDL_GetPerformanceCounter();
         
         //The quit flag

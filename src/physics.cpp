@@ -26,6 +26,8 @@ void updateBall( Ball& ball, double dt )
 
     ball.p = ball.p + ball.v * static_cast<float>( dt );
 
+    float angular_acceleration = ball.torque/ball.inertia;
+
     if( ball.p.y + ball.radius >= kWorldHeightMeters )
     {
         ball.p.y = kWorldHeightMeters - ball.radius;
