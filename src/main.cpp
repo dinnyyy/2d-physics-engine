@@ -4,12 +4,15 @@
 #include "main.h"
 #include "physics.h"
 #include <string>
+#include <algorithm>
+#include <cmath>
 
 SDL_Window* gWindow{ nullptr };
 SDL_Surface* gScreenSurface{ nullptr };
 SDL_Surface* gHelloWorld{ nullptr };
 
-constexpr double kMaxDeltaTime{ 1.0 / 30.0 };
+constexpr double kMaxFrameTime{ 0.25 }; // clamp to avoid spiral of death
+constexpr double kFixedDt{ 1.0 / 60.0 };
 
 /* Function Implementations */
 bool init()
@@ -119,30 +122,37 @@ int main( int argc, char* args[] )
         //The quit flag
         bool quit{ false };
 
-        //The event data
+        // accumulator for fixed-step physics
+        double accumulator = 0.0;
+        Ball previousBall = ball;
+
         //The main loop
         while( quit == false )
         {
-
             Uint64 currentCounter = SDL_GetPerformanceCounter();
-
             Uint64 elapsed = currentCounter - lastCounter;
-
             lastCounter = currentCounter;
 
-            double dt = static_cast<double>( elapsed ) / SDL_GetPerformanceFrequency();
-            if( dt > kMaxDeltaTime )
-            {
-                dt = kMaxDeltaTime;
-            }
+            double frameTime = static_cast<double>( elapsed ) / SDL_GetPerformanceFrequency();
+            // clamp to avoid huge frame times after pauses
+            frameTime = std::min( frameTime, kMaxFrameTime );
+
+            accumulator += frameTime;
 
             handleEvents( quit );
 
-            updateBall( ball, dt );
+            while( accumulator >= kFixedDt )
+            {
+                previousBall = ball;
+                updateBall( ball, kFixedDt );
+                accumulator -= kFixedDt;
+            }
+
+            float alpha = static_cast<float>( accumulator / kFixedDt );
+            Ball renderState = interpolateBall( previousBall, ball, alpha );
 
             clearScreen();
-
-            renderBall( ball );
+            renderBall( renderState );
 
             SDL_UpdateWindowSurface( gWindow );
         }

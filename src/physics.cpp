@@ -19,7 +19,11 @@ int metersToPixelInt( float meters )
 
 void updateBall( Ball& ball, double dt )
 {
-    ball.vy += kGravityMetersPerSecondSquared * static_cast<float>( dt );
+    ball.force_x = 0.0f;
+    ball.force_y = ball.mass * kGravityMetersPerSecondSquared;
+
+    float acceleration_y = ball.force_y / ball.mass;
+    ball.vy += acceleration_y * dt;
 
     ball.x += ball.vx * static_cast<float>( dt );
     ball.y += ball.vy * static_cast<float>( dt );
@@ -41,4 +45,18 @@ void updateBall( Ball& ball, double dt )
         ball.x = kWorldWidthMeters - ball.radius;
         ball.vx *= -kBounceDamping;
     }
+}
+
+Ball interpolateBall( const Ball& prev, const Ball& curr, float alpha )
+{
+    Ball out;
+    out.x = prev.x + (curr.x - prev.x) * alpha;
+    out.y = prev.y + (curr.y - prev.y) * alpha;
+    out.vx = prev.vx + (curr.vx - prev.vx) * alpha;
+    out.vy = prev.vy + (curr.vy - prev.vy) * alpha;
+    out.radius = prev.radius + (curr.radius - prev.radius) * alpha;
+    out.mass = curr.mass;
+    out.force_x = curr.force_x;
+    out.force_y = curr.force_y;
+    return out;
 }
