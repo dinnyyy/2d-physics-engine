@@ -1,8 +1,8 @@
 CMakeFiles/MyProject.dir/src/main.cpp.obj: \
  C:\Users\joshd\OneDrive\ -\ Monash\ University\Projects\C++\src\main.cpp \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_stdinc.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_main.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_platform_defines.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_stdinc.h \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
@@ -26,30 +26,23 @@ CMakeFiles/MyProject.dir/src/main.cpp.obj: \
  C:/msys64/ucrt64/include/sec_api/wchar_s.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_begin_code.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_close_code.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_assert.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_asyncio.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_atomic.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_error.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_events.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_audio.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_endian.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_error.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_mutex.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_atomic.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_thread.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_properties.h \
  C:/msys64/ucrt64/include/process.h \
  C:/msys64/ucrt64/include/corecrt_startup.h \
  C:/msys64/ucrt64/include/sys/types.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_iostream.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_bits.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_blendmode.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_camera.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_pixels.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_surface.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_blendmode.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_rect.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_clipboard.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_cpuinfo.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_dialog.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_video.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_events.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_gamepad.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_guid.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_joystick.h \
@@ -58,15 +51,25 @@ CMakeFiles/MyProject.dir/src/main.cpp.obj: \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_keyboard.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_keycode.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_scancode.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_video.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_mouse.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_pen.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_touch.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_init.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_main_impl.h \
+ C:\Users\joshd\OneDrive\ -\ Monash\ University\Projects\C++\src\main.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_assert.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_asyncio.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_bits.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_clipboard.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_cpuinfo.h \
+ C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_dialog.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_filesystem.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_gpu.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_haptic.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_hidapi.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_hints.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_init.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_loadso.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_locale.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_log.h \
@@ -83,8 +86,6 @@ CMakeFiles/MyProject.dir/src/main.cpp.obj: \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_tray.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_version.h \
  C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_oldnames.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_main.h \
- C:/Users/joshd/ONEDRI~1/Projects/C__~1/build/_deps/sdl3-src/include/SDL3/SDL_main_impl.h \
  C:/msys64/ucrt64/include/c++/15.2.0/string \
  C:/msys64/ucrt64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/msys64/ucrt64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
