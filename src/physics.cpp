@@ -1,6 +1,7 @@
 #include "physics.h"
 
 #include <cmath>
+#include <algorithm>
 
 constexpr float kGravityMetersPerSecondSquared{ 9.8f };
 constexpr float kBounceDamping{ 0.8f };
@@ -44,23 +45,50 @@ void updateBall( Ball& ball, double dt )
     while( ball.angle > PI ) ball.angle -= 2.0f * PI;
     while( ball.angle < -PI ) ball.angle += 2.0f * PI;
 
-    if( ball.p.y + ball.radius >= kWorldHeightMeters )
-    {
-        ball.p.y = kWorldHeightMeters - ball.radius;
-        ball.v.y *= -kBounceDamping;
-    }
+    std::vector<Vec2> ballCorners;
+    ballCorners.reserve( 4 );
 
-    if( ball.p.x - ball.radius <= 0.0f )
-    {
-        ball.p.x = ball.radius;
-        ball.v.x *= -kBounceDamping;
-    }
+    const float halfSize = ball.radius;
+    const Vec2 localCorners[4] = {
+        { -halfSize, -halfSize },
+        { halfSize, -halfSize },
+        { halfSize, halfSize },
+        { -halfSize, halfSize }
+    };
 
-    if( ball.p.x + ball.radius >= kWorldWidthMeters )
-    {
-        ball.p.x = kWorldWidthMeters - ball.radius;
-        ball.v.x *= -kBounceDamping;
+    const float c = std::cos( ball.angle );
+    const float s = std::sin( ball.angle );
+
+    for( int i = 0; i < 4; i++ ) {
+        float rx = localCorners[i].x * c - localCorners[i].y * s;
+        float ry = localCorners[i].x * s + localCorners[i].y * c;
+        ballCorners.push_back( { ball.p.x + rx, ball.p.y + ry } );
     }
+    bool hit_x {false}, hit_y {false};
+    for (const Vec2& v: ballCorners){
+        // Left/right walls: bounce only if moving into the wall
+        if (v.x <= 0.0f && ball.v.x < 0.0f && !hit_x){
+            ball.v.x *= -kBounceDamping;
+            hit_x = true;
+        } 
+        if (v.x >= kWorldWidthMeters && ball.v.x > 0.0f && !hit_x){
+            ball.v.x *= -kBounceDamping;
+            hit_x = true;
+        }
+        // Floor/ceiling: bounce only if moving into the boundary
+        if (v.y <= 0.0f && ball.v.y < 0.0f && !hit_y){
+            ball.v.y *= -kBounceDamping;
+            hit_y = true;
+        }
+        if (v.y >= kWorldHeightMeters && ball.v.y > 0.0f && !hit_y){
+            ball.v.y *= -kBounceDamping;
+            hit_y = true;
+        }
+    }
+    
+    // Keep ball center at valid distance from boundaries to prevent sinking
+    ball.p.y = std::max( ball.p.y, ball.radius );
+    ball.p.x = std::clamp( ball.p.x, ball.radius, kWorldWidthMeters - ball.radius );
 }
 
 Ball interpolateBall( const Ball& prev, const Ball& curr, float alpha )

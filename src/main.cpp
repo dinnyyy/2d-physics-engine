@@ -168,7 +168,7 @@ int main( int argc, char* args[] )
         ball.v.y = 0.0f;
         ball.radius = 0.4f;
 
-        ball.av = 5.0f;  // Initial angular velocity for visible rotation
+        ball.av = 3.0f;  // Initial angular velocity for visible rotation
         ball.inertia = 1.0f;
 
         Uint64 lastCounter = SDL_GetPerformanceCounter();
