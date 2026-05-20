@@ -61,9 +61,9 @@ void updateBall( Ball& ball, double dt )
 {
     // Initialize inertia if needed (solid disk: I = 0.5 * m * r^2)
     if( ball.inertia <= 0.0f ) {
-        ball.inertia = 0.5f * ball.mass * ball.radius * ball.radius;
+        float width = ball.radius * 2.0f;
+        ball.inertia = (1.0f / 12.0f) * ball.mass * (width * width + width * width);
     }
-
     // Linear motion
     ball.force = { 0.0f, ball.mass * kGravityMetersPerSecondSquared };
 
@@ -105,33 +105,55 @@ void updateBall( Ball& ball, double dt )
     }
     bool hit_x {false}, hit_y {false};
     for (const Vec2& v: ballCorners){
-        // Left/right walls: bounce only if moving into the wall
-        if (v.x <= 0.0f && ball.v.x < 0.0f && !hit_x){
+        // Left wall
+        if (v.x <= 0.0f && !hit_x){
             Vec2 rel_v = compute_rel_v(ball, v);
             apply_rel_v(ball, rel_v, Vec2{1.0f,0.0f}, v);
             hit_x = true;
         } 
-        if (v.x >= kWorldWidthMeters && ball.v.x > 0.0f && !hit_x){
+        // Right wall
+        if (v.x >= kWorldWidthMeters && !hit_x){
             Vec2 rel_v = compute_rel_v(ball, v);
             apply_rel_v(ball, rel_v, Vec2{-1.0f,0.0f}, v);
             hit_x = true;
         }
-        // Floor/ceiling: bounce only if moving into the boundary
-        if (v.y <= 0.0f && ball.v.y < 0.0f && !hit_y){
+        // Ceiling (assuming y=0 is the top)
+        if (v.y <= 0.0f && !hit_y){
             Vec2 rel_v = compute_rel_v(ball, v);
-            apply_rel_v(ball, rel_v, Vec2{0.0f,-1.0f}, v);
+            apply_rel_v(ball, rel_v, Vec2{0.0f,-1.0f}, v); // Make sure your normal faces the right way here!
             hit_y = true;
         }
-        if (v.y >= kWorldHeightMeters && ball.v.y > 0.0f && !hit_y){
+        // Floor 
+        if (v.y >= kWorldHeightMeters && !hit_y){
             Vec2 rel_v = compute_rel_v(ball, v);
             apply_rel_v(ball, rel_v, Vec2{0.0f,1.0f}, v);
             hit_y = true;
         }
     }
     
-    // Keep ball center at valid distance from boundaries to prevent sinking
-    ball.p.y = std::max( ball.p.y, ball.radius );
-    ball.p.x = std::clamp( ball.p.x, ball.radius, kWorldWidthMeters - ball.radius );
+    // 1. Find the extreme bounds of our rotated corners
+    float min_x = ballCorners[0].x, max_x = ballCorners[0].x;
+    float min_y = ballCorners[0].y, max_y = ballCorners[0].y;
+    
+    for(int i = 1; i < 4; ++i) {
+        min_x = std::min(min_x, ballCorners[i].x);
+        max_x = std::max(max_x, ballCorners[i].x);
+        min_y = std::min(min_y, ballCorners[i].y);
+        max_y = std::max(max_y, ballCorners[i].y);
+    }
+
+    // 2. Resolve Penetration: Push the center of the box out by the exact amount the deepest corner sank
+    if (min_x < 0.0f) {
+        ball.p.x -= min_x; // Push right out of the left wall
+    } else if (max_x > kWorldWidthMeters) {
+        ball.p.x -= (max_x - kWorldWidthMeters); // Push left out of the right wall
+    }
+    
+    if (min_y < 0.0f) {
+        ball.p.y -= min_y; // Push down out of the ceiling
+    } else if (max_y > kWorldHeightMeters) {
+        ball.p.y -= (max_y - kWorldHeightMeters); // Push up out of the floor
+    }
 }
 
 Ball interpolateBall( const Ball& prev, const Ball& curr, float alpha )
