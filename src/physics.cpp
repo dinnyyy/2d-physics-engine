@@ -5,6 +5,7 @@
 
 constexpr float kGravityMetersPerSecondSquared{ 9.8f };
 constexpr float kBounceDamping{ 0.8f };
+constexpr float restitution{0.6f}; //bouncines
 constexpr float kWorldWidthMeters{ static_cast<float>( kScreenWidth ) / kPixelsPerMeter };
 constexpr float kWorldHeightMeters{ static_cast<float>( kScreenHeight ) / kPixelsPerMeter };
 
@@ -16,6 +17,44 @@ float metersToPixels( float meters )
 int metersToPixelInt( float meters )
 {
     return static_cast<int>( std::lround( metersToPixels( meters ) ) );
+}
+
+void apply_rel_v(Ball& ball, Vec2 v_rel, Vec2 n, Vec2 contact_point){
+    float v_sep = v_rel.x * n.x + v_rel.y * n.y;  // dot product
+
+    Vec2 r;
+    r = contact_point - ball.p;
+    // compute impulse magnitude
+    float inv_mass = 1.0f / ball.mass;
+
+    //rotational resistance - for ground, its just r.x
+    float r_cross_n_x = r.x * n.y - r.y*n.x;
+    float rot_resistance = (r_cross_n_x * r_cross_n_x) / ball.inertia;
+
+    float j = -(1.0f + restitution) *v_sep/(inv_mass+rot_resistance);
+
+    // apply impulse to linear v
+    ball.v += (j*n) *inv_mass;
+
+    // apply impulse to av
+    float torque = r.x * (j * n.y) - r.y * (j * n.x);
+    ball.av += torque / ball.inertia;
+
+}
+
+Vec2 compute_rel_v (Ball& ball, Vec2 contact_point) {
+    Vec2 r;
+    r = contact_point - ball.p;
+
+    Vec2 v_rel;
+    v_rel = ball.v;
+
+    Vec2 v_spin;
+    v_spin.x = -ball.av * r.y;
+    v_spin.y = ball.av *r.x;
+
+    v_rel += v_spin;
+    return v_rel;
 }
 
 void updateBall( Ball& ball, double dt )
@@ -68,20 +107,24 @@ void updateBall( Ball& ball, double dt )
     for (const Vec2& v: ballCorners){
         // Left/right walls: bounce only if moving into the wall
         if (v.x <= 0.0f && ball.v.x < 0.0f && !hit_x){
-            ball.v.x *= -kBounceDamping;
+            Vec2 rel_v = compute_rel_v(ball, v);
+            apply_rel_v(ball, rel_v, Vec2{1.0f,0.0f}, v);
             hit_x = true;
         } 
         if (v.x >= kWorldWidthMeters && ball.v.x > 0.0f && !hit_x){
-            ball.v.x *= -kBounceDamping;
+            Vec2 rel_v = compute_rel_v(ball, v);
+            apply_rel_v(ball, rel_v, Vec2{-1.0f,0.0f}, v);
             hit_x = true;
         }
         // Floor/ceiling: bounce only if moving into the boundary
         if (v.y <= 0.0f && ball.v.y < 0.0f && !hit_y){
-            ball.v.y *= -kBounceDamping;
+            Vec2 rel_v = compute_rel_v(ball, v);
+            apply_rel_v(ball, rel_v, Vec2{0.0f,-1.0f}, v);
             hit_y = true;
         }
         if (v.y >= kWorldHeightMeters && ball.v.y > 0.0f && !hit_y){
-            ball.v.y *= -kBounceDamping;
+            Vec2 rel_v = compute_rel_v(ball, v);
+            apply_rel_v(ball, rel_v, Vec2{0.0f,1.0f}, v);
             hit_y = true;
         }
     }
