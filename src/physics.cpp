@@ -4,7 +4,8 @@
 #include <algorithm>
 
 constexpr float kGravityMetersPerSecondSquared{ 9.8f };
-constexpr float restitution{0.6f}; //bouncines
+constexpr float restitution{0.2f}; //bouncines
+constexpr float frictionConstant{0.1f}; //floor friction
 
 constexpr float kWorldWidthMeters{ static_cast<float>( kScreenWidth ) / kPixelsPerMeter };
 constexpr float kWorldHeightMeters{ static_cast<float>( kScreenHeight ) / kPixelsPerMeter };
@@ -20,9 +21,10 @@ int metersToPixelInt( float meters )
 }
 
 void apply_rel_v(Ball& ball, Vec2 v_rel, Vec2 n, Vec2 contact_point){
+    
     float v_sep = v_rel.x * n.x + v_rel.y * n.y;  // dot product
-
-
+    // Only apply impulse if separating velocity is negative
+    if (v_sep >= 0.0f) return;
     Vec2 r;
     r = contact_point - ball.p;
     // compute impulse magnitude
@@ -31,9 +33,8 @@ void apply_rel_v(Ball& ball, Vec2 v_rel, Vec2 n, Vec2 contact_point){
     //rotational resistance - for ground, its just r.x
     float r_cross_n_x = r.x * n.y - r.y*n.x;
     float rot_resistance = (r_cross_n_x * r_cross_n_x) / ball.inertia;
-    
+
     float j = -(1.0f + restitution) * v_sep / (inv_mass + rot_resistance);
-    
 
     // apply impulse to linear v
     ball.v += (j*n) *inv_mass;
@@ -41,6 +42,25 @@ void apply_rel_v(Ball& ball, Vec2 v_rel, Vec2 n, Vec2 contact_point){
     // apply impulse to av
     float torque = r.x * (j * n.y) - r.y * (j * n.x);
     ball.av += torque / ball.inertia;
+
+    Vec2 n_tan = { -n.y, n.x };;
+    n_tan.x *= -1.0f;
+
+    float v_tan = v_rel.x*n_tan.x + v_rel.y*n_tan.y;
+    float r_cross_n_x_tan = r.x * n_tan.y - r.y*n_tan.x;
+    float rot_resistance_tan = (r_cross_n_x_tan * r_cross_n_x_tan) / ball.inertia;
+    float j_tan = -v_tan / (inv_mass + rot_resistance_tan);
+    float max_friction = j * frictionConstant; // 'j' is the normal impulse from earlier
+
+    // Clamp j_t between -max_friction and +max_friction
+    j_tan = std::clamp(j_tan, -max_friction, max_friction);
+
+    ball.v.x += (j_tan * n_tan.x) * inv_mass;
+    ball.v.y += (j_tan * n_tan.y) * inv_mass;
+
+    // 7. Apply the friction torque to angular velocity
+    float torque_t = r.x * (j_tan * n_tan.y) - r.y * (j_tan * n_tan.x);
+    ball.av += torque_t / ball.inertia;
 
 }
 
@@ -85,28 +105,28 @@ std::vector<Vec2> compute_world_corners( const Ball& ball ) {
 void detect_boundary_collisions( Ball& ball, const std::vector<Vec2>& corners ) {
     bool hit_x {false}, hit_y {false};
     for (const Vec2& v: corners){
-        // Left wall
+        // Left wall (Normal points RIGHT)
         if (v.x <= 0.0f && !hit_x){
             Vec2 rel_v = compute_rel_v(ball, v);
-            apply_rel_v(ball, rel_v, Vec2{1.0f,0.0f}, v);
+            apply_rel_v(ball, rel_v, Vec2{1.0f, 0.0f}, v);
             hit_x = true;
         } 
-        // Right wall
+        // Right wall (Normal points LEFT)
         if (v.x >= kWorldWidthMeters && !hit_x){
             Vec2 rel_v = compute_rel_v(ball, v);
-            apply_rel_v(ball, rel_v, Vec2{-1.0f,0.0f}, v);
+            apply_rel_v(ball, rel_v, Vec2{-1.0f, 0.0f}, v);
             hit_x = true;
         }
-        // Ceiling
+        // Ceiling (Normal points DOWN)
         if (v.y <= 0.0f && !hit_y){
             Vec2 rel_v = compute_rel_v(ball, v);
-            apply_rel_v(ball, rel_v, Vec2{0.0f,-1.0f}, v);
+            apply_rel_v(ball, rel_v, Vec2{0.0f, 1.0f}, v); 
             hit_y = true;
         }
-        // Floor 
+        // Floor (Normal points UP)
         if (v.y >= kWorldHeightMeters && !hit_y){
             Vec2 rel_v = compute_rel_v(ball, v);
-            apply_rel_v(ball, rel_v, Vec2{0.0f,1.0f}, v);
+            apply_rel_v(ball, rel_v, Vec2{0.0f, -1.0f}, v); // Changed to -1.0f!
             hit_y = true;
         }
     }
