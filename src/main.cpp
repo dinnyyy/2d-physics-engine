@@ -173,7 +173,7 @@ int main( int argc, char* args[] )
 
         Ball ball2;
         ball2.p.x = 3.0f;
-        ball2.p.y = 3.0f;
+        ball2.p.y = 1.0f;
         ball2.v.x = -1.0f;
         ball2.v.y = 0.0f;
         ball2.radius = 0.4f;
