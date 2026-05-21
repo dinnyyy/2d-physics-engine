@@ -159,17 +159,28 @@ int main( int argc, char* args[] )
     }
     else
     {
-        Ball ball;
+        std::vector<Ball> balls;
 
-        ball.p.x = 1.0f;
-        ball.p.y = 1.0f;
+        Ball ball1;
+        ball1.p.x = 1.0f;
+        ball1.p.y = 1.0f;
+        ball1.v.x = 1.0f;
+        ball1.v.y = 0.0f;
+        ball1.radius = 0.4f;
+        ball1.av = 3.0f;  // Initial angular velocity for visible rotation
+        ball1.inertia = 1.0f;
+        balls.push_back( ball1 );
 
-        ball.v.x = 1.0f;
-        ball.v.y = 0.0f;
-        ball.radius = 0.4f;
+        Ball ball2;
+        ball2.p.x = 3.0f;
+        ball2.p.y = 3.0f;
+        ball2.v.x = -1.0f;
+        ball2.v.y = 0.0f;
+        ball2.radius = 0.4f;
+        ball2.av = -3.0f;  // Initial angular velocity for visible rotation
+        ball2.inertia = 1.0f;
+        balls.push_back( ball2 );
 
-        ball.av = 3.0f;  // Initial angular velocity for visible rotation
-        ball.inertia = 1.0f;
 
         Uint64 lastCounter = SDL_GetPerformanceCounter();
         
@@ -178,7 +189,7 @@ int main( int argc, char* args[] )
 
         // accumulator for fixed-step physics
         double accumulator = 0.0;
-        Ball previousBall = ball;
+        std::vector<Ball> previousBalls = balls;
 
         //The main loop
         while( quit == false )
@@ -197,16 +208,20 @@ int main( int argc, char* args[] )
 
             while( accumulator >= kFixedDt )
             {
-                previousBall = ball;
-                updateBall( ball, kFixedDt );
+                previousBalls = balls;
+                for( Ball& b : balls ) {
+                    updateBall( b, kFixedDt );
+                }
                 accumulator -= kFixedDt;
             }
 
             float alpha = static_cast<float>( accumulator / kFixedDt );
-            Ball renderState = interpolateBall( previousBall, ball, alpha );
 
             clearScreen();
-            renderBall( renderState );
+            for( size_t i = 0; i < balls.size(); ++i ) {
+                Ball renderState = interpolateBall( previousBalls[i], balls[i], alpha );
+                renderBall( renderState );
+            }
 
             SDL_UpdateWindowSurface( gWindow );
         }

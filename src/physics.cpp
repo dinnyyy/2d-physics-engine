@@ -4,8 +4,8 @@
 #include <algorithm>
 
 constexpr float kGravityMetersPerSecondSquared{ 9.8f };
-constexpr float restitution{0.2f}; //bouncines
-constexpr float frictionConstant{0.1f}; //floor friction
+constexpr float restitution{0.4f}; //bouncines
+constexpr float frictionConstant{0.05f}; //floor friction
 
 constexpr float kWorldWidthMeters{ static_cast<float>( kScreenWidth ) / kPixelsPerMeter };
 constexpr float kWorldHeightMeters{ static_cast<float>( kScreenHeight ) / kPixelsPerMeter };
