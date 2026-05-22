@@ -85,8 +85,9 @@ void renderBall (const Ball& ball) {
         py[i] = cy + metersToPixelInt( ry );
     }
     
-    // Draw rotated square filled with black
-    Uint32 black = SDL_MapSurfaceRGB( gScreenSurface, 0, 0, 0 );
+    Uint32 color = ball.isHit
+        ? SDL_MapSurfaceRGB( gScreenSurface, 0, 255, 0 )
+        : SDL_MapSurfaceRGB( gScreenSurface, 0, 0, 0 );
 
     int minY = std::min( {py[0], py[1], py[2], py[3]} );
     int maxY = std::max( {py[0], py[1], py[2], py[3]} );
@@ -118,7 +119,7 @@ void renderBall (const Ball& ball) {
             int xEnd = static_cast<int>( std::floor( intersections[k + 1] ) );
             if( xEnd >= xStart ) {
                 SDL_Rect line{ xStart, y, xEnd - xStart + 1, 1 };
-                SDL_FillSurfaceRect( gScreenSurface, &line, black );
+                SDL_FillSurfaceRect( gScreenSurface, &line, color );
             }
         }
     }
@@ -210,7 +211,7 @@ int main( int argc, char* args[] )
             {
                 previousBalls = balls;
                 for( Ball& b : balls ) {
-                    updateBall( b, kFixedDt );
+                    updateBall( b, kFixedDt, balls);
                 }
                 accumulator -= kFixedDt;
             }

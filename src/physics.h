@@ -54,6 +54,7 @@ struct Ball {
 
     float torque{0.0f};
     float inertia{0.0f};
+    bool isHit{ false };
     
 
 
@@ -63,5 +64,5 @@ constexpr float kPixelsPerMeter{ 100.0f };
 
 float metersToPixels( float meters );
 int metersToPixelInt( float meters );
-void updateBall( Ball& ball, double dt );
+void updateBall( Ball& ball, double dt, const std::vector<Ball>& balls );
 Ball interpolateBall( const Ball& prev, const Ball& curr, float alpha );

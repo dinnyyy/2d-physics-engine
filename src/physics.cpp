@@ -1,5 +1,6 @@
 #include "physics.h"
 
+#include <array>
 #include <cmath>
 #include <algorithm>
 
@@ -173,11 +174,113 @@ void update_angular_motion( Ball& ball, float dt ) {
     while( ball.angle < -PI ) ball.angle += 2.0f * PI;
 }
 
-void detect_boundary_collisions (){
-    
+struct PixelPoint {
+    int x;
+    int y;
+};
+
+// The function returns an array of exactly 4 PixelPoints
+std::array<PixelPoint, 4> getCorners(const Ball& ball) {
+    int cx = metersToPixelInt(ball.p.x);
+    int cy = metersToPixelInt(ball.p.y);
+
+    // Corners of the ball square centered at origin
+    float halfSize = ball.radius;
+    const Vec2 localCorners[4] = {
+        { -halfSize, -halfSize },
+        { halfSize, -halfSize },
+        { halfSize, halfSize },
+        { -halfSize, halfSize }
+    };
+
+    // Rotate corners by ball.angle
+    float c = std::cos(ball.angle);
+    float s = std::sin(ball.angle);
+
+    std::array<PixelPoint, 4> screenCorners;
+
+    for( int i = 0; i < 4; i++ ) {
+        float rx = localCorners[i].x * c - localCorners[i].y * s;
+        float ry = localCorners[i].x * s + localCorners[i].y * c;
+        
+        screenCorners[i].x = cx + metersToPixelInt(rx);
+        screenCorners[i].y = cy + metersToPixelInt(ry);
+    }
+
+    return screenCorners;
 }
 
-void updateBall( Ball& ball, double dt )
+std::vector<Vec2> find_testing_axes( const Ball& ball ) {
+    std::array<PixelPoint, 4> screenCorners = getCorners( ball );
+
+    Vec2 corner1{ static_cast<float>( screenCorners[0].x ), static_cast<float>( screenCorners[0].y ) };
+    Vec2 corner2{ static_cast<float>( screenCorners[1].x ), static_cast<float>( screenCorners[1].y ) };
+    Vec2 corner3{ static_cast<float>( screenCorners[2].x ), static_cast<float>( screenCorners[2].y ) };
+    
+    Vec2 edge_vector1{corner2-corner1};
+    Vec2 edge_vector2{corner3-corner2};
+    
+    float len1 = std::sqrt(edge_vector1.x * edge_vector1.x +
+                       edge_vector1.y * edge_vector1.y);
+
+    float len2 = std::sqrt(edge_vector2.x * edge_vector2.x +
+                        edge_vector2.y * edge_vector2.y);
+
+    Vec2 axes1{
+        -edge_vector1.y / len1,
+        edge_vector1.x / len1
+    };
+
+    Vec2 axes2{
+        -edge_vector2.y / len2,
+        edge_vector2.x / len2
+    };
+
+    return {axes1, axes2};
+}
+
+
+bool detect_ball_collision( const Ball& b1, const Ball& b2 ){
+    std::array<PixelPoint, 4> b1_corners = getCorners( b1 );
+    std::array<PixelPoint, 4> b2_corners = getCorners( b2 );
+    std::vector<Vec2> b1_axes{find_testing_axes(b1)};
+    std::vector<Vec2> b2_axes{find_testing_axes(b2)};
+
+    std::vector<Vec2> axes = b1_axes;
+
+    axes.insert(
+        axes.end(),
+        b2_axes.begin(),
+        b2_axes.end()
+    );
+    
+    for (Vec2& axis : axes) {
+        std::array<float, 4> b1_projections;
+        std::array<float, 4> b2_projections;
+        
+        for (float i=0; i<4; i++) {
+            b1_projections[i] = b1_corners[i].x*axis.x + b1_corners[i].y*axis.y;
+            b2_projections[i] = b2_corners[i].x*axis.x + b2_corners[i].y*axis.y;
+        }
+        auto [b1_min_it, b1_max_it] = std::minmax_element( b1_projections.begin(), b1_projections.end() );
+        auto [b2_min_it, b2_max_it] = std::minmax_element( b2_projections.begin(), b2_projections.end() );
+
+        float b1_min = *b1_min_it;
+        float b1_max = *b1_max_it;
+        float b2_min = *b2_min_it;
+        float b2_max = *b2_max_it;
+
+        if( b1_max < b2_min || b1_min > b2_max ) {
+            return false;
+        }
+    }
+
+    return true;
+
+    return false;
+}
+
+void updateBall( Ball& ball, double dt, const std::vector<Ball>& balls )
 {
     // Initialize inertia if needed
     if( ball.inertia <= 0.0f ) {
@@ -190,6 +293,17 @@ void updateBall( Ball& ball, double dt )
 
     std::vector<Vec2> corners = compute_world_corners( ball );
     detect_boundary_collisions( ball, corners );
+    ball.isHit = false;
+    for( const Ball& other : balls ) {
+        if( &other == &ball ) {
+            continue;
+        }
+
+        if( detect_ball_collision( ball, other ) ) {
+            ball.isHit = true;
+            break;
+        }
+    }
 }
 
 Ball interpolateBall( const Ball& prev, const Ball& curr, float alpha )
